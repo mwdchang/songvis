@@ -21,7 +21,7 @@ export function createParallelCoord(ref, data, colourScale) {
   let actives = [];
 
   // const dimensions = ['releaseYear', 'duration', 'valence', 'energey', 'popularity'];
-  const dimensions = ['releaseYear', 'duration', 'valence', 'energy', 'popularity'];
+  const dimensions = ['releaseYear', 'duration', 'valence', 'energy', 'danceability', 'popularity'];
 
   dimensions.forEach(dim => {
     y[dim] = d3.scaleLinear()
@@ -47,6 +47,8 @@ export function createParallelCoord(ref, data, colourScale) {
     .style('stroke-width', 2.0)
     .attr('d', path);
 
+  window.d3 = d3;
+
   // Add blue foreground lines for focus.
   const foreground = svgAdjusted.append('g')
     .attr('class', 'foreground')
@@ -57,13 +59,24 @@ export function createParallelCoord(ref, data, colourScale) {
     .style('stroke', d => colourScale(d.name))
     .style('fill', 'none')
     .style('opacity', 0.5)
-    .on('mouseover', (event, d) => {
+    .on('mouseover', function(event, d) {
       d3.selectAll('.background').selectAll('path').filter(p => p.name === d.name && d.song === p.song)
         .style('stroke-width', 5)
         .style('stroke', colourScale(d.name));
+
+      // console.log(d3.pointer(svgAdjusted.node()));
+      const coords = d3.pointer(event);
+
+      // const coords = d3.mouse(svg);
+      svg.append('text')
+        .classed('tip', true)
+        .attr('x', coords[0])
+        .attr('y', coords[1])
+        .text(d.name + ' ' + d.song);
     })
     .on('mouseout', d => {
       svg.selectAll('.background').selectAll('path').style('stroke-width', 2.0).style('stroke', '#eee');
+      svg.selectAll('.tip').remove();
     });
 
   // Add a group element for each dimension.

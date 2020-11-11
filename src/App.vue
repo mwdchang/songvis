@@ -1,7 +1,13 @@
 <template>
   <vis-section
-    v-if="songData && 1 === 2"
+    v-if="songData"
     :header-text="'Metric'">
+    <div>
+      Various quantifiable song metrics in a parallel-coordinate. Each vertical-axis can be "brushed" to create a cross-filter. Hover
+      over the person in the legend to highlight their respective songs.
+
+      Note Valence is a measure of how "happy" a song sounds
+    </div>
     <parallel />
   </vis-section>
 
