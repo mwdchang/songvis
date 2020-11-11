@@ -1,20 +1,40 @@
 <template>
   <vis-section
+    v-if="songData && 1 === 2"
+    :header-text="'Metric'">
+    <parallel />
+  </vis-section>
+
+  <vis-section
     v-if="songData"
     :header-text="'Musical taste'">
-    <div>Taste in Music</div>
+    <div>
+      How similar are the musical tastes. Construct a subgraph for each person and their top-N genres, then link these subgraphs together
+      by the shared genres. The new graph is then recalculated with force-directed layout. Each person's node size reflects the diversity
+      in their music genres. Hover over the small-nodes to see the genre types,
+      click on each peron's node to toggle their "influence" area.
+    </div>
     <bubble-force />
   </vis-section>
 
-  <!--
-  <vis-section :header-text="'Lyrical similarity'">
-    <div>How similiar are the lyrics</div>
+  <vis-section
+    v-if="songData && vectorData"
+    :header-text="'Lyrical similarity'">
+    <div>
+      How similiar are the song lyrics to each other. Using gensim to produce high-dimensional vector-embeddings, then use UMAP to
+      reduce down to 3D space. Each circle represent a single submission and colour-coded with the individual's hue. Hoever over each
+      circle to see the song title.
+    </div>
     <scatter-plot />
   </vis-section>
-  -->
 
-  <vis-section :header-text="'Songs'">
-    <div>Songs</div>
+  <vis-section
+    v-if="songData"
+    :header-text="'Songs'">
+    <div>
+      Music of the day submission history. Just a listing of submissions that were recorded.
+    </div>
+    <listing />
   </vis-section>
 </template>
 
@@ -23,15 +43,19 @@ import { mapActions, mapGetters } from 'vuex';
 
 import VisSection from './components/vis-section';
 import BubbleForce from './components/bubble-force';
-// import ScatterPlot from './components/scatter-plot';
-import { loadSongData } from './util/loader';
+import Parallel from './components/parallel';
+import ScatterPlot from './components/scatter-plot';
+import Listing from './components/listing';
+import { loadSongData, loadLyricVectorData } from './util/loader';
 
 export default {
   name: 'App',
   components: {
     VisSection,
-    BubbleForce
-    // ScatterPlot
+    BubbleForce,
+    Parallel,
+    ScatterPlot,
+    Listing
   },
   setup() {
     console.log('Application setup');
@@ -39,17 +63,22 @@ export default {
   },
   computed: {
     ...mapGetters({
-      songData: 'songData'
+      songData: 'songData',
+      vectorData: 'vectorData'
     })
   },
   mounted() {
     loadSongData('./June2020.tsv').then(songData => {
       this.setSongData(songData);
     });
+    loadLyricVectorData('./vectors.tsv').then(data => {
+      this.setVectorData(data);
+    });
   },
   methods: {
     ...mapActions({
-      setSongData: 'setSongData'
+      setSongData: 'setSongData',
+      setVectorData: 'setVectorData'
     })
   }
 };

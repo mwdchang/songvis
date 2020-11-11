@@ -5,16 +5,15 @@ import { addPadding, createOutline } from 'bubblesets-js';
 const personR = 2;
 const nonPersonR = 5;
 
+console.log('d3 version', d3.version);
 
-// hack
-const colourScale = () => '#f80';
 
 // A path generator
 export const pathFn = d3.line()
   .x(d => d.x)
   .y(d => d.y);
 
-export function createForce(ref, nodes, edges) {
+export function createForce(ref, nodes, edges, colourScale) {
   const svg = d3.select(ref); // .attr('width', width).attr('height', height);
   const forceBackground = svg.append('g');
 
@@ -53,8 +52,8 @@ export function createForce(ref, nodes, edges) {
     .enter().append('g');
 
   node.filter(d => d.type === 'person')
-    .on('click', function(d) {
-      if (d3.event.defaultPrevented) return;
+    .on('click', function(event, d) {
+      if (event.defaultPrevented) return;
 
       const selection = forceBackground.selectAll('.bubbleset').filter(x => x.id === d.id);
       if (selection.size() > 0) {
@@ -84,12 +83,17 @@ export function createForce(ref, nodes, edges) {
       }
       return 'crosshair';
     })
-    .on('mouseover', function(d) {
-      if (d.type !== 'person') {
-      } else {
+    .on('mouseover', function(event, d) {
+      if (d.type === 'genre') {
+        svg.append('text')
+          .classed('tip', true)
+          .attr('x', d.x - 20)
+          .attr('y', d.y - 10)
+          .text(d.id);
       }
     })
     .on('mouseleave', function() {
+      svg.selectAll('.tip').remove();
     })
     .call(d3.drag()
       .on('start', dragstarted)
@@ -106,11 +110,7 @@ export function createForce(ref, nodes, edges) {
 
 
   function bubbleset(name, colour) {
-    // const bubbles = new BubbleSets();
-
     const related = edges.filter(e => e.source.id === name).map(e => e.target.id);
-    // const connectedPersons = edges.filter(e => related.indexOf(e.target.id) >= 0).map(e => e.source.id);
-    // let group = [...related, ...connectedPersons];
     const group = [name, ...related];
 
     const inSet = node.filter(d => group.includes(d.id)).data().map(d => {
@@ -202,19 +202,19 @@ export function createForce(ref, nodes, edges) {
     */
   }
 
-  function dragstarted(d) {
-    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  function dragstarted(event, d) {
+    if (!event.active) simulation.alphaTarget(0.3).restart();
     d.fx = d.x;
     d.fy = d.y;
   }
 
-  function dragged(d) {
-    d.fx = d3.event.x;
-    d.fy = d3.event.y;
+  function dragged(event, d) {
+    d.fx = event.x;
+    d.fy = event.y;
   }
 
-  function dragended(d) {
-    if (!d3.event.active) simulation.alphaTarget(0);
+  function dragended(event, d) {
+    if (!event.active) simulation.alphaTarget(0);
     d.fx = null;
     d.fy = null;
   }

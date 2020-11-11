@@ -1,22 +1,21 @@
 <template>
-  <svg ref="bubbleforce" class="container"/>
+  <svg ref="parallel" class="container"/>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
-import { createForce } from '../charts/force';
+import { createParallelCoord } from '../charts/parallel';
 
 export default {
-  name: 'BubbleForce',
+  name: 'Parallel',
   computed: {
     ...mapGetters({
       songData: 'songData'
     })
   },
   mounted() {
-    const ref = this.$refs.bubbleforce;
-    const graph = this.songData.graph;
-    createForce(ref, graph.nodes, graph.edges, this.songData.colourScale);
+    const ref = this.$refs.parallel;
+    createParallelCoord(ref, this.songData.songs, this.songData.colourScale);
   }
 };
 </script>

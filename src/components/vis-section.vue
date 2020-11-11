@@ -27,7 +27,7 @@ export default {
 $theme-color: #369;
 
 .vis-section {
-  margin: 5px 25px;
+  margin: 10px 25px;
 
   .vis-section-header {
     border-top-left-radius: 8px;

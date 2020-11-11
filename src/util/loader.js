@@ -1,6 +1,19 @@
 import _ from 'lodash';
 import * as d3 from 'd3';
 
+const loadLyricVectorData = async (url) => {
+  const data = await d3.tsv(url);
+
+  // Deserialize
+  data.forEach(d => {
+    d.vector = d.vector.split('|').map(v => +v);
+  });
+
+  return {
+    vectors: data
+  };
+};
+
 const loadSongData = async (url) => {
   const data = await d3.tsv(url);
 
@@ -72,15 +85,19 @@ const loadSongData = async (url) => {
     });
   });
 
-  // console.log(names);
-  // console.log('songdata', data);
+
+  // Aux
+  const colourScale = d3.scaleOrdinal().domain(names).range(d3.schemeDark2);
+
   return {
     songs: data,
     graph: { nodes, edges },
-    names
+    names,
+    colourScale
   };
 };
 
 export {
-  loadSongData
+  loadSongData,
+  loadLyricVectorData
 };
