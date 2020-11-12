@@ -1,4 +1,5 @@
 <template>
+
   <vis-section
     v-if="songData"
     :header-text="'Metric'">
@@ -13,7 +14,7 @@
 
   <vis-section
     v-if="songData"
-    :header-text="'Musical taste'">
+    :header-text="'Musical genres'">
     <div>
       How similar are the musical tastes. Construct a subgraph for each person and their top-N genres, then link these subgraphs together
       by the shared genres. The new graph is then recalculated with force-directed layout. Each person's node size reflects the diversity
