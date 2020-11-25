@@ -37,7 +37,7 @@
 
   <vis-section
     v-if="songData"
-    :header-text="'Songs'">
+    :header-text="'Playlist'">
     <div>
       Music of the day submission history. Just a listing of submissions that were recorded.
     </div>
@@ -75,10 +75,10 @@ export default {
     })
   },
   mounted() {
-    loadSongData('./June2020.tsv').then(songData => {
+    loadSongData('./attrs.tsv').then(songData => {
       this.setSongData(songData);
     });
-    loadLyricVectorData('./vectors.tsv').then(data => {
+    loadLyricVectorData('./lyrics.tsv').then(data => {
       this.setVectorData(data);
     });
   },

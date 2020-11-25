@@ -1,9 +1,18 @@
 <template>
-  <div ref="scatter" class="scatter-plot"/>
+  <div style="display: flex">
+    <div ref="scatter" class="scatter-plot"/>
+    <div style="overflow: scroll; max-height: 360px; font-size: 85%; padding: 10px 5px; box-sizing: border-box">
+      <div v-for="(v, k) of lyrics.split('  ')" :key="k">
+        {{v}}
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
+import _ from 'lodash';
 import * as d3 from 'd3';
+import { ref } from 'vue';
 import { mapGetters } from 'vuex';
 import { UMAP } from 'umap-js';
 import { ScatterGL } from 'scatter-gl';
@@ -18,23 +27,24 @@ const manhattan = (x, y) => {
 };
 */
 
-
 export default {
   name: 'ScatterPlot',
   props: {
   },
   setup(props) {
     const umap = new UMAP({
-      minDist: 0.2,
+      minDist: 0.070,
       nComponents: 3,
       nNeighbors: 15,
-      spread: 1.0
+      spread: 1.1
 
       // Custom distance
       // distanceFn: manhattan
     });
+
+    const lyrics = ref('');
     return {
-      umap
+      umap, lyrics
     };
   },
   computed: {
@@ -47,7 +57,7 @@ export default {
     const el = this.$refs.scatter;
     const scatterGL = new ScatterGL(el, {
       pointColorer: (i) => {
-        const trackId = this.vectorData.vectors[i].trackId;
+        const trackId = this.vectorData[i].trackId;
         const song = this.songData.songs.find(s => s.trackId === trackId);
         if (song) {
           const c = d3.color(this.songData.colourScale(song.name));
@@ -56,20 +66,24 @@ export default {
         }
         return '#888';
       },
+      onHover: (p) => {
+        if (_.isNil(p)) return;
+        this.lyrics = this.vectorData[p].lyrics;
+        console.log('!!', this.lyrics.split('  ').length);
+      },
       showLabelsOnHover: true,
       selectEnabled: false,
       renderMode: 'POINT'
     });
 
-    const embedding = this.umap.fit(this.vectorData.vectors.map(d => d.vector));
+    const embedding = this.umap.fit(this.vectorData.map(d => d.vector));
     const metadata = embedding.map((e, i) => {
-      const trackId = this.vectorData.vectors[i].trackId;
+      const trackId = this.vectorData[i].trackId;
       let song = this.songData.songs.find(s => s.trackId === trackId);
       if (!song) song = {};
       return {
         labelIndex: i,
         label: `(${song.name}) - ${song.song}`
-        // label: '!!! Test test test !!!'
       };
     });
 
@@ -83,7 +97,7 @@ export default {
 <style lang="scss">
 .scatter-plot {
   position: relative; // scatter-gl has a secondary label-canvas layer that is absolute
-  width: 90%;
+  width: 50%;
   height: 380px;
 }
 </style>

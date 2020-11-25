@@ -9,9 +9,7 @@ const loadLyricVectorData = async (url) => {
     d.vector = d.vector.split('|').map(v => +v);
   });
 
-  return {
-    vectors: data
-  };
+  return data;
 };
 
 const loadSongData = async (url) => {
@@ -19,7 +17,6 @@ const loadSongData = async (url) => {
 
   // Deserialize
   data.forEach(d => {
-    d.relatedArtists = d.relatedArtists.split('|');
     d.artistGenres = d.artistGenres.split('|');
   });
 
