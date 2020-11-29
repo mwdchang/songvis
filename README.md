@@ -1,6 +1,9 @@
 # songvis
 A visualization of your team's playlist, leveraging Spotify's track attributes and other analytics.
 
+![alt text](images/songvis.png "Songvis")
+
+
 
 ## Getting data
 ### Requirements
