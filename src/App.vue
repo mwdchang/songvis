@@ -75,7 +75,7 @@ export default {
     })
   },
   mounted() {
-    loadSongData('./attrs.tsv').then(songData => {
+    loadSongData('./tracks.tsv').then(songData => {
       this.setSongData(songData);
     });
     loadLyricVectorData('./lyrics.tsv').then(data => {

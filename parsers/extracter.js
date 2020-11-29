@@ -4,6 +4,7 @@ const _ = require('lodash');
 
 require('dotenv').config();
 
+const filename = process.argv[2];
 
 // credentials are optional
 const spotifyApi = new SpotifyWebApi({
@@ -73,7 +74,7 @@ async function extractData(name, trackId) {
 
 
 async function processList() {
-  const list = (fs.readFileSync('full.csv', 'utf8')).split('\n');
+  const list = (fs.readFileSync(filename, 'utf8')).split('\n');
   const columns = [
     'name',
     'song',

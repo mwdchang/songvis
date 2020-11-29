@@ -23,8 +23,11 @@ A CSV formatted file with 3-coumns, tracking the person, song/track id, and the 
 Track data are fetched via Spotify's API.
 ```
 cd parsers
+
+# Rename sample.env to .env and fill out the access credentials
+
 npm install
-node extracter.js <input.csv> <tracks.tsv>
+node extracter.js <input.csv> > tracks.tsv
 ```
 
 ### Lyrics analysis
@@ -32,7 +35,7 @@ Lyrical similarity and others. Using GenSim
 ```
 cd parsers
 pip3 install -r requirements.txt
-python3 vectorize.py <input.csv> <lyrics.tsv>
+python3 vectorize.py <input.csv> > lyrics.tsv
 ```
 
 
