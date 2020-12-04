@@ -24,7 +24,7 @@ export default {
 </script>
 
 <style scoped lang='scss'>
-$theme-color: #369;
+$theme-color: #368;
 
 .vis-section {
   margin: 10px 25px;

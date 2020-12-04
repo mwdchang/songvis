@@ -19,9 +19,7 @@ export function createParallelCoord(ref, data, colourScale) {
   const svgAdjusted = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
   let actives = [];
-
-  // const dimensions = ['releaseYear', 'duration', 'valence', 'energey', 'popularity'];
-  const dimensions = ['releaseYear', 'duration', 'valence', 'energy', 'danceability', 'popularity'];
+  const dimensions = ['releaseYear', 'duration', 'valence', 'energy', 'danceability', 'popularity', 'tempo'];
 
   dimensions.forEach(dim => {
     y[dim] = d3.scaleLinear()

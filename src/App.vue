@@ -36,6 +36,14 @@
   </vis-section>
 
   <vis-section
+    v-if="songData && vectorData"
+    :header-text="'Avatars'">
+    <div> Personal avatars </div>
+    <avatars />
+  </vis-section>
+
+
+  <vis-section
     v-if="songData"
     :header-text="'Playlist'">
     <div>
@@ -53,6 +61,7 @@ import BubbleForce from './components/bubble-force';
 import Parallel from './components/parallel';
 import ScatterPlot from './components/scatter-plot';
 import Listing from './components/listing';
+import Avatars from './components/avatars';
 import { loadSongData, loadLyricVectorData } from './util/loader';
 
 export default {
@@ -62,7 +71,8 @@ export default {
     BubbleForce,
     Parallel,
     ScatterPlot,
-    Listing
+    Listing,
+    Avatars
   },
   setup() {
     console.log('Application setup');
