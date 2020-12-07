@@ -39,7 +39,8 @@ export default {
         const attrs = this.songData.songs.map(s => s[dimensions[i]]);
         r.push({
           name: dimensions[i],
-          max: Math.max(...attrs),
+          // Cap skewed durations
+          max: dimensions[i] === 'duration' ? 10 : Math.max(...attrs),
           min: Math.min(...attrs)
         });
       }
